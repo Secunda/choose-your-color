@@ -9,4 +9,6 @@ export default StackNavigator({
     settings: {screen: Settings},
     result: {screen: Result},
     game: {screen: Game},
+}, {
+    initialRouteName: 'home',
 });
