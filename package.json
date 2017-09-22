@@ -25,8 +25,12 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@expo/vector-icons": "^5.2.0",
     "eslint-plugin-react-native": "^3.1.0",
-    "expo": "^20.0.0",
+    "expo": "^21.0.0",
+    "lodash": "^4.17.4",
+    "native-base": "^2.3.2",
+    "prop-types": "^15.5.10",
     "react": "16.0.0-alpha.12",
     "react-native": "^0.47.0",
     "react-navigation": "^1.0.0-beta.11"

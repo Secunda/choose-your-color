@@ -1,5 +1,13 @@
 {
   "expo": {
-    "sdkVersion": "20.0.0"
+    "name": "Color game for friends",
+    "version": "1.0.0",
+    "sdkVersion": "21.0.0",
+    "icon": "./app/assets/icons/icon.png",
+    "loading": {
+      "backgroundColor": "#FFFFFF",
+      "backgroundImage": "./app/assets/icons/bg.png",
+      "icon": "./app/assets/icons/logo.png"
+    }
   }
 }
