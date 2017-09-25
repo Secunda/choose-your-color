@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
     content: {
-        padding: 30,
+        padding: 0,
     },
     menu: {
         flex: 1,
