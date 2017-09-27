@@ -1,10 +1,29 @@
 import {
     APP_STORE_READY,
+    APP_LOAD_SETTINGS,
+    APP_SAVE_SETTINGS_GAME_SIZE,
+    APP_RESET_SETTINGS,
 } from '../actions/app/types';
 
 const inititalState = {
-    gameField: 10,
     isAppStoreReady: false,
+    settings: {
+        game: {
+            fieldSize: {
+                rows: 10,
+                cols: 10,
+            },
+            colors: {
+                cl1: '#F00',
+                cl2: '#FF8000',
+                cl3: '#FFFF00',
+                cl4: '#00FF00',
+                cl5: '#00FFFF',
+                cl6: '#0000FF',
+                cl7: '#FF00FF',
+            },
+        },
+    },
 };
 
 export default function reducer(state = inititalState, action) {
@@ -13,6 +32,24 @@ export default function reducer(state = inititalState, action) {
             return {
                 ...state,
                 isAppStoreReady: true,
+            };
+        }
+        case APP_LOAD_SETTINGS: {
+            return {
+                ...state,
+                settings: action.settings || inititalState.settings,
+            };
+        }
+        case APP_SAVE_SETTINGS_GAME_SIZE: {
+            return {
+                ...state,
+                settings: action.settings,
+            };
+        }
+        case APP_RESET_SETTINGS: {
+            return {
+                ...state,
+                settings: inititalState.settings,
             };
         }
         default:

@@ -1,29 +1,61 @@
 import React, {Component} from 'react';
-import {Container, Header, Title, Text, Button, List, ListItem, Icon, Left, Body, Right, Switch, Picker} from 'native-base';
-import {View} from 'react-native';
+import {Container, Header, Title, Text, Button, List, ListItem, Icon, Left, Body, Right, Badge, Picker} from 'native-base';
+import {View, AsyncStorage, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {autobind} from 'core-decorators';
+import _ from 'lodash';
 
 import Layout from '../layout';
 
 import styles from './styles';
 
-export default class Home extends Component {
+import {
+  loadSettings,
+  resetSettings,
+  saveSettingsGameSize,
+} from '../../store/actions/app';
+
+@autobind
+class Home extends Component {
     static get propTypes() {
         return {
             navigation: PropTypes.object.isRequired,
+            dispatch: PropTypes.func.isRequired,
+            app: PropTypes.shape({
+                settings: PropTypes.object,
+            }),
         };
     }
 
-    constructor(props) {
-        super(props);
+    static get defaultProps() {
+        return {
+            app: {
+                isAppStoreReady: false,
+            },
+        };
+    }
+
+    async componentWillMount() {
+        const settingsFromStorage = await AsyncStorage.getItem('gameSettings');
+
+        if (settingsFromStorage) {
+            await this.props.dispatch(loadSettings(settingsFromStorage));
+        }
+    }
+
+    async saveGameSize(itemValue) {
+        await this.props.dispatch(saveSettingsGameSize(itemValue, this.props.app.settings));
+    }
+
+    async resetSettings() {
+        await this.props.dispatch(resetSettings());
     }
 
     render() {
+        console.log(123, this.props);
+        const {settings} = this.props.app;
         /**
-         * https://www.packtpub.com/mapt/book/application_development/9781786464750/1/ch01lvl1sec19/asyncstorage
-         * https://www.thepolyglotdeveloper.com/2015/09/saving-data-in-your-react-native-mobile-application/
-         * https://facebook.github.io/react-native/docs/asyncstorage.html
-         *
          * https://casesandberg.github.io/react-color/#examples
          */
         return (
@@ -47,15 +79,16 @@ export default class Home extends Component {
                     </Body>
                     <Right>
                       <Picker
-                        selectedValue="5"
+                        style={styles.gameSize}
+                        selectedValue={_.get(settings, 'game.fieldSize.rows', 10)}
                         mode="dialog"
-                        onValueChange={() => {}}
+                        onValueChange={this.saveGameSize}
                       >
-                        <Picker.Item label="5x5" value="5" />
-                        <Picker.Item label="10x10" value="10" />
-                        <Picker.Item label="15x15" value="15" />
-                        <Picker.Item label="20x20" value="20" />
-                        <Picker.Item label="25x25" value="25" />
+                        <Picker.Item label="5x5" value={5} />
+                        <Picker.Item label="10x10" value={10} />
+                        <Picker.Item label="15x15" value={15} />
+                        <Picker.Item label="20x20" value={20} />
+                        <Picker.Item label="25x25" value={25} />
                       </Picker>
                     </Right>
                   </ListItem>
@@ -63,11 +96,26 @@ export default class Home extends Component {
                     <Body>
                       <Text>Цвета</Text>
                     </Body>
-                    <Right />
+                  </ListItem>
+                  <ListItem style={styles.listItem}>
+                    <Body style={styles.bodyColorFields}>
+                      {
+                        _.map(settings.game.colors, (color, className) => {
+                            const currentStyle = {backgroundColor: color};
+                            return (
+                              <TouchableOpacity key={className} onPress={console.log(123)}>
+                                <Badge style={[currentStyle, styles.colorFields]} />;
+                              </TouchableOpacity>
+                            );
+                        })
+                      }
+                    </Body>
                   </ListItem>
                   <ListItem style={styles.listItem}>
                     <Body>
-                      <Text>Сбросить настройки</Text>
+                      <Button onPress={this.resetSettings}>
+                        <Text>Сбросить настройки</Text>
+                      </Button>
                     </Body>
                   </ListItem>
                 </List>
@@ -77,3 +125,7 @@ export default class Home extends Component {
         );
     }
 }
+
+export default connect(state => ({
+    app: state.app,
+}))(Home);

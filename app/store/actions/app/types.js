@@ -1,1 +1,4 @@
 export const APP_STORE_READY = '@@app/APP_STORE_READY';
+export const APP_LOAD_SETTINGS = '@@app/APP_LOAD_SETTINGS';
+export const APP_RESET_SETTINGS = '@@app/APP_RESET_SETTINGS';
+export const APP_SAVE_SETTINGS_GAME_SIZE = '@@app/APP_SAVE_SETTINGS_GAME_SIZE';
