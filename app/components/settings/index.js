@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {Container, Header, Title, Text, Button, List, ListItem, Icon, Left, Body, Right, Badge, Picker} from 'native-base';
-import {View, AsyncStorage, TouchableOpacity} from 'react-native';
+import {View, AsyncStorage, TouchableOpacity, Modal} from 'react-native';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {autobind} from 'core-decorators';
 import _ from 'lodash';
+import {ColorPicker} from 'react-native-color-picker';
 
 import Layout from '../layout';
 
@@ -36,6 +37,19 @@ class Home extends Component {
         };
     }
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            colorPicker: {
+                show: false,
+                element: null,
+                oldColor: null,
+                newColor: null,
+            },
+        };
+    }
+
     async componentWillMount() {
         const settingsFromStorage = await AsyncStorage.getItem('gameSettings');
 
@@ -52,9 +66,23 @@ class Home extends Component {
         await this.props.dispatch(resetSettings());
     }
 
+    changeColor(className, color) {
+        this.setState({
+            colorPicker: {
+                show: true,
+                element: className,
+                oldColor: color,
+                newColor: color,
+            },
+        });
+    }
+
     render() {
         console.log(123, this.props);
         const {settings} = this.props.app;
+
+        console.log(456, this.state);
+        const {colorPicker} = this.state;
         /**
          * https://casesandberg.github.io/react-color/#examples
          */
@@ -103,8 +131,8 @@ class Home extends Component {
                         _.map(settings.game.colors, (color, className) => {
                             const currentStyle = {backgroundColor: color};
                             return (
-                              <TouchableOpacity key={className} onPress={console.log(123)}>
-                                <Badge style={[currentStyle, styles.colorFields]} />;
+                              <TouchableOpacity key={className} onPress={this.changeColor(className, color)}>
+                                <Badge style={[currentStyle, styles.colorFields]} />
                               </TouchableOpacity>
                             );
                         })
@@ -120,6 +148,23 @@ class Home extends Component {
                   </ListItem>
                 </List>
               </View>
+
+              <Modal
+                animationType="slide"
+                transparent={false}
+                visible={colorPicker.show}
+                onRequestClose={() => { console.log('Modal has been closed.'); }}
+              >
+                <View style={{flex: 1, padding: 15, backgroundColor: '#212021'}}>
+                  <Text style={{color: 'white'}}>Выберите цвет</Text>
+                  <ColorPicker
+                    oldColor={colorPicker.oldColor}
+                    color={colorPicker.oldColor}
+                    onColorSelected={color => console.log(`Color selected: ${color}`)}
+                    style={{flex: 1}}
+                  />
+                </View>
+              </Modal>
             </Container>
           </Layout>
         );
