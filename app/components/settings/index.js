@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {autobind} from 'core-decorators';
 import _ from 'lodash';
-import {ColorPicker} from 'react-native-color-picker';
+import {TriangleColorPicker, fromHsv} from 'react-native-color-picker';
 
 import Layout from '../layout';
 
@@ -40,12 +40,14 @@ class Home extends Component {
     constructor(props) {
         super(props);
 
+        this.newColor = null;
+
         this.state = {
             colorPicker: {
                 show: false,
                 element: null,
                 oldColor: null,
-                newColor: null,
+                newColor: this.newColor,
             },
         };
     }
@@ -66,7 +68,7 @@ class Home extends Component {
         await this.props.dispatch(resetSettings());
     }
 
-    changeColor(className, color) {
+    showChangeColorModal(className, color) {
         this.setState({
             colorPicker: {
                 show: true,
@@ -77,12 +79,30 @@ class Home extends Component {
         });
     }
 
-    render() {
-        console.log(123, this.props);
-        const {settings} = this.props.app;
+    closeChangeColorModal() {
+        const newState = _.cloneDeep(this.state);
+        newState.colorPicker.show = false;
 
-        console.log(456, this.state);
-        const {colorPicker} = this.state;
+        this.setState(newState);
+    }
+
+    changeColor(color) {
+        const newState = _.cloneDeep(this.state);
+        newState.colorPicker.newColor = fromHsv(color);
+
+        this.setState(newState);
+    }
+
+    chooseColor(color) {
+        console.log(color);
+        this.changeColor(color);
+        this.closeChangeColorModal();
+    }
+
+    render() {
+        const settings = _.get(this.props, 'app.settings');
+
+        const colorPicker = _.get(this.state, 'colorPicker');
         /**
          * https://casesandberg.github.io/react-color/#examples
          */
@@ -121,17 +141,15 @@ class Home extends Component {
                     </Right>
                   </ListItem>
                   <ListItem style={styles.listItem}>
-                    <Body>
+                    <Left>
                       <Text>Цвета</Text>
-                    </Body>
-                  </ListItem>
-                  <ListItem style={styles.listItem}>
+                    </Left>
                     <Body style={styles.bodyColorFields}>
                       {
                         _.map(settings.game.colors, (color, className) => {
                             const currentStyle = {backgroundColor: color};
                             return (
-                              <TouchableOpacity key={className} onPress={this.changeColor(className, color)}>
+                              <TouchableOpacity key={className} onPress={() => this.showChangeColorModal(className, color)}>
                                 <Badge style={[currentStyle, styles.colorFields]} />
                               </TouchableOpacity>
                             );
@@ -153,14 +171,16 @@ class Home extends Component {
                 animationType="slide"
                 transparent={false}
                 visible={colorPicker.show}
-                onRequestClose={() => { console.log('Modal has been closed.'); }}
+                onRequestClose={this.closeChangeColorModal}
               >
                 <View style={{flex: 1, padding: 15, backgroundColor: '#212021'}}>
                   <Text style={{color: 'white'}}>Выберите цвет</Text>
-                  <ColorPicker
+                  <TriangleColorPicker
                     oldColor={colorPicker.oldColor}
-                    color={colorPicker.oldColor}
-                    onColorSelected={color => console.log(`Color selected: ${color}`)}
+                    color={colorPicker.newColor}
+                    onColorChange={this.changeColor}
+                    onColorSelected={color => this.chooseColor(color)}
+                    onOldColorSelected={color => this.chooseColor(color)}
                     style={{flex: 1}}
                   />
                 </View>

@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
     },
     colorFields: {
         width: 40,
-        marginRight: 5,
+        height: 40,
+        margin: 7,
     },
 });
 

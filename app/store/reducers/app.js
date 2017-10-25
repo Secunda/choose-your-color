@@ -21,6 +21,7 @@ const inititalState = {
                 cl5: '#00FFFF',
                 cl6: '#0000FF',
                 cl7: '#FF00FF',
+                cl8: '#888888',
             },
         },
     },
