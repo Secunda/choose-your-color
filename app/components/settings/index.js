@@ -15,6 +15,7 @@ import {
   loadSettings,
   resetSettings,
   saveSettingsGameSize,
+  saveSettingsColorSection,
 } from '../../store/actions/app';
 
 @autobind
@@ -93,9 +94,11 @@ class Home extends Component {
         this.setState(newState);
     }
 
-    chooseColor(color) {
-        console.log(color);
+    async chooseColor(color) {
         this.changeColor(color);
+
+        await this.props.dispatch(saveSettingsColorSection(color, this.state.colorPicker.element));
+
         this.closeChangeColorModal();
     }
 

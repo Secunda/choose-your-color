@@ -5,6 +5,7 @@ import {
     APP_LOAD_SETTINGS,
     APP_RESET_SETTINGS,
     APP_SAVE_SETTINGS_GAME_SIZE,
+    APP_SAVE_SETTINGS_COLOR_SECTION,
 } from './types';
 
 export const startApplication = () => ({
@@ -17,16 +18,23 @@ export const loadSettings = settingsFromStorage => ({
 });
 
 export const saveSettingsGameSize = (gameSize, settings) => {
-    const updatedSettings = _.cloneDeep(settings);
+    const newState = _.cloneDeep(settings);
 
-    _.set(updatedSettings, 'game.fieldSize.rows', gameSize);
-    _.set(updatedSettings, 'game.fieldSize.cols', gameSize);
+    _.set(newState, 'game.fieldSize.rows', gameSize);
+    _.set(newState, 'game.fieldSize.cols', gameSize);
 
     return {
         type: APP_SAVE_SETTINGS_GAME_SIZE,
-        settings: updatedSettings,
+        settings: newState,
     };
 };
+
+export const saveSettingsColorSection = (color, colorSection) => ({
+    type: APP_SAVE_SETTINGS_COLOR_SECTION,
+    colors: {
+        [colorSection]: color,
+    },
+});
 
 export const resetSettings = () => ({
     type: APP_RESET_SETTINGS,

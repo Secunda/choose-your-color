@@ -5,7 +5,7 @@
     "sdkVersion": "21.0.0",
     "icon": "./app/assets/icons/icon.png",
     "loading": {
-      "backgroundColor": "#FFFFFF",
+      "backgroundColor": "#777777",
       "backgroundImage": "./app/assets/icons/bg.png",
       "icon": "./app/assets/icons/logo.png"
     }

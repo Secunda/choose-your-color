@@ -1,8 +1,11 @@
+import _ from 'lodash';
+
 import {
     APP_STORE_READY,
     APP_LOAD_SETTINGS,
     APP_SAVE_SETTINGS_GAME_SIZE,
     APP_RESET_SETTINGS,
+    APP_SAVE_SETTINGS_COLOR_SECTION,
 } from '../actions/app/types';
 
 const inititalState = {
@@ -52,6 +55,12 @@ export default function reducer(state = inititalState, action) {
                 ...state,
                 settings: inititalState.settings,
             };
+        }
+        case APP_SAVE_SETTINGS_COLOR_SECTION: {
+            const newState = _.cloneDeep(state);
+
+            _.set(newState, 'settings.game.colors', _.merge({}, newState.settings.game.colors, action.colors));
+            return newState;
         }
         default:
             return state;
