@@ -1,48 +1,35 @@
+import _ from 'lodash';
 import {
-    GENERATE_GAME,
     START_GAME,
+    GENERATE_GAME,
+    GENERATED_GAME,
 } from '../actions/game/types';
 
 const inititalState = {
-    /**
-     * Game state
-     */
-    step: 0,
+    started: false,
+    generated: false,
+    gameSettings: {},
     matrix: [],
     score: 0,
-
-    /**
-     * Game properties
-     */
-    started: false,
-    finished: false,
-
-    /**
-     * Game options
-     */
-    currentColor: '',
-    colNumbers: 10,
-    rowNumbers: 10,
 };
 
 export default function reducer(state = inititalState, action) {
     switch (action.type) {
-        case GENERATE_GAME: {
-            return {
-                ...state,
-                matrix: action.matrix,
-            };
-        }
         case START_GAME: {
-            return {
-                ...state,
-                started: true,
-                finished: false,
-                step: action.step,
-                matrix: action.matrix,
-                score: action.score,
-                currentColor: action.currentColor,
-            };
+            const newState = _.cloneDeep(state);
+            newState.started = true;
+            return newState;
+        }
+        case GENERATE_GAME: {
+            const newState = _.cloneDeep(state);
+            newState.gameSettings = action.settings;
+            return newState;
+        }
+        case GENERATED_GAME: {
+            const newState = _.cloneDeep(state);
+            newState.matrix = action.matrix;
+            newState.generated = true;
+            return newState;
         }
         default:
             return state;

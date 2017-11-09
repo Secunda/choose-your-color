@@ -18,7 +18,12 @@ export default class Home extends Component {
           <Layout>
             <Container style={styles.content}>
               <View style={styles.menu}>
-                <Button block success style={styles.menuButton}>
+                <Button
+                  block
+                  success
+                  style={styles.menuButton}
+                  onPress={() => this.props.navigation.navigate('game')}
+                >
                   <Text>Играть</Text>
                 </Button>
                 <Button block warning onPress={() => this.props.navigation.navigate('settings')}>

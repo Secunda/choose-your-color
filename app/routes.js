@@ -9,7 +9,7 @@ export default StackNavigator({
     home: {screen: Home},
     settings: {screen: Settings},
     // result: {screen: Result},
-    // game: {screen: Game},
+    game: {screen: Game},
 }, {
     initialRouteName: 'home',
     headerMode: 'none',
