@@ -16,6 +16,10 @@ const styles = StyleSheet.create({
     chooserContent: {
         flex: 1,
         alignSelf: 'auto',
+        marginTop: 10,
+        padding: 3,
+        borderTopWidth: 3,
+        borderTopColor: '#FFFFFF',
     },
     bodyColorFields: {
         flex: 1,
@@ -46,7 +50,6 @@ const styles = StyleSheet.create({
     gameCell: {
         flex: 1,
         alignSelf: 'auto',
-        width: 20,
         height: 20,
     },
 });
