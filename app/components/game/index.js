@@ -13,9 +13,18 @@ import Score from './blocks/score';
 import Table from './blocks/table';
 import Chooser from './blocks/chooser';
 
-import {generateNewGame} from './../../logic';
+import {
+    generateNewGame,
+    GameLogic,
+} from './../../logic';
 
-import {startGame, generateGame, generatedGame} from './../../store/actions/game';
+import {
+    startGame,
+    generateGame,
+    generatedGame,
+    gameStep,
+    gameScore,
+} from './../../store/actions/game';
 
 @autobind
 class Game extends Component {
@@ -23,9 +32,7 @@ class Game extends Component {
         return {
             navigation: PropTypes.object.isRequired,
             dispatch: PropTypes.func.isRequired,
-            app: PropTypes.shape({
-                settings: PropTypes.object,
-            }),
+            game: PropTypes.object.isRequired,
         };
     }
 
@@ -48,15 +55,23 @@ class Game extends Component {
         await this.props.dispatch(generatedGame(gameMatrix));
     }
 
-    step(className, color) {
-        console.log(className, color);
+    async step(className) {
+        const game = this.props.game;
+
+        const logic = new GameLogic(game.matrix);
+        const gameMatrix = logic.gameStep(className);
+        const affectedCells = logic.gameAffectedCells(className);
+        const score = logic.gameScore(affectedCells, game.affectedCells, game.score);
+        console.log(affectedCells, game.affectedCells, game.score)
+
+        await this.props.dispatch(gameStep(gameMatrix));
+        await this.props.dispatch(gameScore(affectedCells, score));
     }
 
     render() {
         const settings = _.get(this.props, 'app.settings');
         const game = this.props.game;
 
-        console.log(this.props);
         return (
           <Layout>
             <Container>
@@ -67,7 +82,7 @@ class Game extends Component {
                   </Button>
                 </Left>
                 <Body>
-                  <Score score={0} />
+                  <Score score={game.score} />
                 </Body>
               </Header>
               <View style={styles.flexContainer}>

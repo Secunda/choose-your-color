@@ -19,6 +19,29 @@ export default class Table extends Component {
         };
     }
 
+    static customElementsStyle(i, j, rows, cols) {
+        let customElementsStyle = {};
+        if (i === 0) {
+            if (j === 0) {
+                customElementsStyle = styles.gameCellTopLeft;
+            }
+            if (j === rows - 1) {
+                customElementsStyle = styles.gameCellTopRight;
+            }
+        }
+
+        if (i === cols - 1) {
+            if (j === 0) {
+                customElementsStyle = styles.gameCellBottomLeft;
+            }
+            if (j === rows - 1) {
+                customElementsStyle = styles.gameCellBottomRight;
+            }
+        }
+
+        return customElementsStyle;
+    }
+
     render() {
         const {matrix, colors} = this.props;
 
@@ -29,7 +52,7 @@ export default class Table extends Component {
                     {
                         _.map(row, (color, j) => {
                             const currentStyle = {backgroundColor: _.get(colors, color)};
-                            return <View style={[styles.gameCell, currentStyle]} key={j} />;
+                            return <View style={[styles.gameCell, currentStyle, Table.customElementsStyle(i, j, row.length, matrix.length)]} key={j} />;
                         })
                     }
                   </View>);

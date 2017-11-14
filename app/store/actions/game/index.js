@@ -4,6 +4,8 @@ import {
     START_GAME,
     GENERATE_GAME,
     GENERATED_GAME,
+    GAME_STEP,
+    GAME_SCORE,
 } from './types';
 
 export const startGame = () => ({
@@ -18,4 +20,15 @@ export const generateGame = settings => ({
 export const generatedGame = matrix => ({
     matrix,
     type: GENERATED_GAME,
+});
+
+export const gameStep = matrix => ({
+    matrix,
+    type: GAME_STEP,
+});
+
+export const gameScore = (affectedCells, score) => ({
+    affectedCells,
+    score,
+    type: GAME_SCORE,
 });
