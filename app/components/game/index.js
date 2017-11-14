@@ -62,7 +62,6 @@ class Game extends Component {
         const gameMatrix = logic.gameStep(className);
         const affectedCells = logic.gameAffectedCells(className);
         const score = logic.gameScore(affectedCells, game.affectedCells, game.score);
-        console.log(affectedCells, game.affectedCells, game.score)
 
         await this.props.dispatch(gameStep(gameMatrix));
         await this.props.dispatch(gameScore(affectedCells, score));
@@ -86,7 +85,7 @@ class Game extends Component {
                 </Body>
               </Header>
               <View style={styles.flexContainer}>
-                <Table matrix={game.matrix} colors={settings.game.colors} />
+                <Table matrix={game.matrix} colors={settings.game.colors} animate={game.animate} />
                 <Chooser colors={settings.game.colors} step={this.step} />
               </View>
             </Container>

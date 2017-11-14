@@ -5,6 +5,7 @@ import {
     GENERATED_GAME,
     GAME_STEP,
     GAME_SCORE,
+    GAME_ANIMATED,
 } from '../actions/game/types';
 
 const inititalState = {
@@ -15,6 +16,7 @@ const inititalState = {
     score: 0,
     affectedCells: 0,
     currentColor: null,
+    animate: true,
 };
 
 export default function reducer(state = inititalState, action) {
@@ -46,6 +48,11 @@ export default function reducer(state = inititalState, action) {
             const newState = _.cloneDeep(state);
             newState.score = action.score;
             newState.affectedCells = action.affectedCells;
+            return newState;
+        }
+        case GAME_ANIMATED: {
+            const newState = _.cloneDeep(state);
+            newState.animate = false;
             return newState;
         }
         default:

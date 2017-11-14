@@ -1,6 +1,5 @@
 import {StyleSheet} from 'react-native';
 
-const gameBorder = 5;
 const styles = StyleSheet.create({
     flexContainer: {
         flex: 1,
@@ -14,9 +13,6 @@ const styles = StyleSheet.create({
         flex: 7,
         alignContent: 'center',
         alignItems: 'center',
-        borderWidth: 2,
-        borderColor: '#CCCCCC',
-        borderRadius: gameBorder,
         margin: 1,
     },
     chooserContent: {
@@ -57,18 +53,8 @@ const styles = StyleSheet.create({
         flex: 1,
         alignSelf: 'auto',
         height: 'auto',
-    },
-    gameCellTopLeft: {
-        borderTopLeftRadius: gameBorder,
-    },
-    gameCellTopRight: {
-        borderTopRightRadius: gameBorder,
-    },
-    gameCellBottomLeft: {
-        borderBottomLeftRadius: gameBorder,
-    },
-    gameCellBottomRight: {
-        borderBottomRightRadius: gameBorder,
+        borderWidth: 1,
+        borderColor: '#FFFFFF',
     },
 });
 

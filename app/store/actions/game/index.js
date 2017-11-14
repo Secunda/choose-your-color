@@ -6,6 +6,7 @@ import {
     GENERATED_GAME,
     GAME_STEP,
     GAME_SCORE,
+    GAME_ANIMATED,
 } from './types';
 
 export const startGame = () => ({
@@ -31,4 +32,8 @@ export const gameScore = (affectedCells, score) => ({
     affectedCells,
     score,
     type: GAME_SCORE,
+});
+
+export const gameAnimated = () => ({
+    type: GAME_ANIMATED,
 });
