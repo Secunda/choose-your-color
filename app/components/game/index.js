@@ -58,13 +58,15 @@ class Game extends Component {
     async step(className) {
         const game = this.props.game;
 
-        const logic = new GameLogic(game.matrix);
-        const gameMatrix = logic.gameStep(className);
-        const affectedCells = logic.gameAffectedCells(className);
-        const score = logic.gameScore(affectedCells, game.affectedCells, game.score);
+        if (game.animate === false) {
+            const logic = new GameLogic(game.matrix);
+            const gameMatrix = logic.gameStep(className);
+            const affectedCells = logic.gameAffectedCells(className);
+            const score = logic.gameScore(affectedCells, game.affectedCells, game.score);
 
-        await this.props.dispatch(gameStep(gameMatrix));
-        await this.props.dispatch(gameScore(affectedCells, score));
+            await this.props.dispatch(gameStep(gameMatrix));
+            await this.props.dispatch(gameScore(affectedCells, score));
+        }
     }
 
     render() {

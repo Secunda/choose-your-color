@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {View, Animated} from 'react-native';
+import {View, Animated, Easing} from 'react-native';
 import _ from 'lodash';
 import {connect} from 'react-redux';
 
@@ -38,10 +38,11 @@ class Table extends Component {
             this.animatedValue[key],
             {
                 toValue: 1,
-                duration: 1000,
+                duration: 100,
+                easing: Easing.inOut(Easing.circle),
             },
         ));
-        Animated.stagger(100, animations).start(() => {
+        Animated.sequence(animations).start(() => {
             this.props.dispatch(gameAnimated());
         });
     }
