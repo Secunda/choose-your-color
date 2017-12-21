@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image} from 'react-native';
+import {ImageBackground} from 'react-native';
 import PropTypes from 'prop-types';
 
 import styles from './styles';
@@ -15,9 +15,9 @@ export default class Layout extends Component {
 
     render() {
         return (
-          <Image style={styles.background} source={background}>
+          <ImageBackground style={styles.background} source={background}>
             {this.props.children}
-          </Image>
+          </ImageBackground>
         );
     }
 }
