@@ -29,7 +29,8 @@
     "test": "node node_modules/jest/bin/jest.js --watch",
     "remotedev": "remotedev-debugger --injectserver",
     "postinstall": "npm run remotedev && rndebugger-open",
-    "devtools": "react-devtools"
+    "devtools": "react-devtools",
+    "lint": "./node_modules/eslint/bin/eslint.js --fix ./app/**"
   },
   "jest": {
     "preset": "jest-expo"

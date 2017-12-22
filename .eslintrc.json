@@ -9,18 +9,16 @@
             1,
             150
         ],
-        "indent": ["error", 4, {
-            "SwitchCase": 1
-        }],
         "jsx-quotes": ["error", "prefer-double"],
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-        "react/prefer-stateless-function": [1, { "ignorePureComponents": true }],
+        "react/prefer-stateless-function": [0, { "ignorePureComponents": true }],
         "quotes": ["error", "single", {"allowTemplateLiterals": true}],
         "key-spacing": ["warn", {"beforeColon": false, "mode": "strict"}],
         "no-use-before-define": ["error", { "functions": false, "classes": true }],
         "object-curly-spacing": ["error", "never"],
         "import/prefer-default-export": "off",
-        "class-methods-use-this": 0
+        "class-methods-use-this": 0,
+        "react/forbid-prop-types": [1, { "forbid": ["any", "array", "object"] }]
     },
     "globals": {
         "window": true

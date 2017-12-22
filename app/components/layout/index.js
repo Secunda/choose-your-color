@@ -7,17 +7,17 @@ import styles from './styles';
 const background = require('../../assets/icons/bg_main.png');
 
 export default class Layout extends Component {
-    static get propTypes() {
-        return {
-            children: PropTypes.any.isRequired,
-        };
-    }
+  static get propTypes() {
+    return {
+      children: PropTypes.any.isRequired,
+    };
+  }
 
-    render() {
-        return (
-          <ImageBackground style={styles.background} source={background}>
-            {this.props.children}
-          </ImageBackground>
-        );
-    }
+  render() {
+    return (
+      <ImageBackground style={styles.background} source={background}>
+        {this.props.children}
+      </ImageBackground>
+    );
+  }
 }
