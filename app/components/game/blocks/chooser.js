@@ -14,6 +14,10 @@ export default class Chooser extends Component {
     };
   }
 
+  shouldComponentUpdate(nextProps) {
+    return false;
+  }
+
   render() {
     return (
       <View style={styles.chooserContent}>

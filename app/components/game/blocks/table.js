@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 import {gameAnimated} from './../../../store/actions/game';
 
 import styles from './../styles';
+import Cell from './cell';
 
 class Table extends Component {
   static get propTypes() {
@@ -47,8 +48,40 @@ class Table extends Component {
     });
   }
 
+  renderAnimatedView(i, row) {
+    const {colors} = this.props;
+
+    const rowStyle = {
+      opacity: this.animatedValue[i],
+    };
+    const rowContent = (
+      <Animated.View style={[styles.gameRow, rowStyle]} key={i}>
+        {
+          _.map(row, (color, j) => <Cell color={_.get(colors, color)} key={j} />)
+        }
+      </Animated.View>);
+
+    return rowContent;
+  }
+
+  renderView(i, row) {
+    const {colors} = this.props;
+
+    const rowStyle = {
+      opacity: 1,
+    };
+    const rowContent = (
+      <View style={[styles.gameRow, rowStyle]} key={i}>
+        {
+          _.map(row, (color, j) => <Cell color={_.get(colors, color)} key={j} />)
+        }
+      </View>);
+
+    return rowContent;
+  }
+
   render() {
-    const {matrix, colors} = this.props;
+    const {matrix} = this.props;
 
     if (matrix.length && this.props.animate) {
       this.generateAnimation(matrix);
@@ -59,24 +92,7 @@ class Table extends Component {
     return (
       <View style={styles.gameContent}>
         {
-            _.map(matrix, (row, i) => {
-                const rowStyle = {
-                    opacity: this.animatedValue[i],
-                };
-                const rowContent = (
-                  <Animated.View style={[styles.gameRow, rowStyle]} key={i}>
-                    {
-                        _.map(row, (color, j) => {
-                            const currentStyle = {
-                                backgroundColor: _.get(colors, color),
-                            };
-                            return <View style={[styles.gameCell, currentStyle]} key={j} />;
-                        })
-                    }
-                  </Animated.View>);
-
-                return rowContent;
-            })
+          _.map(matrix, (row, i) => (this.props.animate ? this.renderAnimatedView(i, row) : this.renderView(i, row)))
         }
       </View>);
   }
