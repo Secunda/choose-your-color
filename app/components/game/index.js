@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Header, Button, Icon, Left, Body} from 'native-base';
+import {Container, Header, Button, Icon, Left, Right, Body} from 'native-base';
 import {View} from 'react-native';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
@@ -79,12 +79,17 @@ class Game extends Component {
           <Header>
             <Left>
               <Button transparent onPress={() => this.props.navigation.navigate('home')}>
-                <Icon name="arrow-back" />
+                <Icon name="md-arrow-round-back" />
               </Button>
             </Left>
             <Body>
               <Score score={game.score} />
             </Body>
+            <Right>
+              <Button transparent onPress={() => this.startNewGame()}>
+                <Icon name="md-refresh-circle" />
+              </Button>
+            </Right>
           </Header>
           <View style={styles.flexContainer}>
             <Table matrix={game.matrix} colors={settings.game.colors} animate={game.animate} />

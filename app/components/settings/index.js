@@ -1,11 +1,31 @@
 import React, {Component} from 'react';
-import {Container, Header, Title, Text, Button, List, ListItem, Icon, Left, Body, Right, Badge, Picker} from 'native-base';
+import {
+  Container,
+  Header,
+  Title,
+  Text,
+  Button,
+  List,
+  ListItem,
+  Icon,
+  Left,
+  Body,
+  Right,
+  Badge,
+  Picker,
+} from 'native-base';
 import {View, AsyncStorage, TouchableOpacity, Modal} from 'react-native';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {autobind} from 'core-decorators';
 import _ from 'lodash';
-import {TriangleColorPicker, fromHsv} from 'react-native-color-picker';
+
+import {
+  HueSlider,
+  SaturationSlider,
+  LightnessSlider,
+} from 'react-native-color';
+import tinycolor from 'tinycolor2';
 
 import Layout from '../layout';
 
@@ -45,6 +65,7 @@ class Home extends Component {
 
     this.state = {
       colorPicker: {
+        modal: false,
         show: false,
         element: null,
         oldColor: null,
@@ -69,53 +90,149 @@ class Home extends Component {
     await this.props.dispatch(resetSettings());
   }
 
-  showChangeColorModal(className, color) {
+  /**
+   * Show color picker modal
+   */
+  showChangeColorModal() {
     this.setState({
       colorPicker: {
-        show: true,
-        element: className,
-        oldColor: color,
-        newColor: color,
+        modal: true,
       },
     });
   }
 
-  closeChangeColorModal() {
+  /**
+   * Show sliders
+   * @param {string} className
+   * @param {string} color
+   */
+  showColorPicker(className, color) {
+    const newState = _.cloneDeep(this.state);
+    newState.colorPicker.show = true;
+    newState.colorPicker.element = className;
+    newState.colorPicker.oldColor = color;
+    newState.colorPicker.newColor = color;
+
+    this.setState(newState);
+  }
+
+  /**
+   * Hide sliders
+   */
+  hideColorPicker() {
     const newState = _.cloneDeep(this.state);
     newState.colorPicker.show = false;
 
     this.setState(newState);
   }
 
-  changeColor(color) {
+  /**
+   * Close color picker modal
+   */
+  closeChangeColorModal() {
     const newState = _.cloneDeep(this.state);
-    newState.colorPicker.newColor = fromHsv(color);
+    newState.colorPicker.modal = false;
+    newState.colorPicker.show = false;
 
     this.setState(newState);
   }
 
-  async chooseColor(color) {
-    this.changeColor(color);
+  updateHue(h) {
+    const newState = _.cloneDeep(this.state);
+    const colorPicker = _.get(newState, 'colorPicker');
+    const color = tinycolor(colorPicker.oldColor).toHsl();
 
-    await this.props.dispatch(saveSettingsColorSection(color, this.state.colorPicker.element));
+    color.h = h;
 
-    this.closeChangeColorModal();
+    this.changeColor(tinycolor(color).toHexString());
+  }
+
+  updateSaturation(s) {
+    const newState = _.cloneDeep(this.state);
+    const colorPicker = _.get(newState, 'colorPicker');
+    const color = tinycolor(colorPicker.oldColor).toHsl();
+
+    color.s = s;
+
+    this.changeColor(tinycolor(color).toHexString());
+  }
+
+  updateLightness(l) {
+    const newState = _.cloneDeep(this.state);
+    const colorPicker = _.get(newState, 'colorPicker');
+    const color = tinycolor(colorPicker.oldColor).toHsl();
+
+    color.l = l;
+
+    this.changeColor(tinycolor(color).toHexString());
+  }
+
+  changeColor(color) {
+    const newState = _.cloneDeep(this.state);
+    newState.colorPicker.newColor = color;
+
+    this.setState(newState);
+  }
+
+  async chooseColor() {
+    const colorPicker = _.get(this.state, 'colorPicker');
+    const color = colorPicker.newColor;
+
+    await this.props.dispatch(saveSettingsColorSection(color, colorPicker.element));
+
+    this.hideColorPicker();
+  }
+
+  renderColorPicker() {
+    const colorPicker = _.get(this.state, 'colorPicker');
+    const showColorPicker = colorPicker.show;
+    const color = tinycolor(colorPicker.oldColor).toHsl();
+    const newColor = tinycolor(colorPicker.newColor).toHexString();
+
+    if (showColorPicker) {
+      return (
+        <View style={styles.colorFieldSliders}>
+          <View style={[styles.colorFieldPreview, {backgroundColor: newColor}]} />
+          <Text style={styles.componentText}>Цвет</Text>
+          <HueSlider
+            style={styles.sliderRow}
+            gradientSteps={40}
+            value={color.h}
+            onValueChange={this.updateHue}
+          />
+          <Text style={styles.componentText}>Насыщенность</Text>
+          <SaturationSlider
+            style={styles.sliderRow}
+            gradientSteps={20}
+            value={color.s}
+            color={color}
+            onValueChange={this.updateSaturation}
+          />
+          <Text style={styles.componentText}>Яркость</Text>
+          <LightnessSlider
+            style={styles.sliderRow}
+            gradientSteps={20}
+            value={color.l}
+            color={color}
+            onValueChange={this.updateLightness}
+          />
+        </View>);
+    }
+
+    return null;
   }
 
   render() {
     const settings = _.get(this.props, 'app.settings');
-
     const colorPicker = _.get(this.state, 'colorPicker');
-    /**
-         * https://casesandberg.github.io/react-color/#examples
-         */
+
     return (
       <Layout>
         <Container>
           <Header>
             <Left>
               <Button transparent onPress={() => this.props.navigation.navigate('home')}>
-                <Icon name="arrow-back" />
+                <Icon name="md-arrow-round-back" />
               </Button>
             </Left>
             <Body>
@@ -124,7 +241,12 @@ class Home extends Component {
           </Header>
           <View>
             <List style={styles.list}>
-              <ListItem style={styles.listItem}>
+              <ListItem style={styles.listItem} icon>
+                <Left>
+                  <Button style={{backgroundColor: '#4CDA64'}}>
+                    <Icon name="md-grid" />
+                  </Button>
+                </Left>
                 <Body>
                   <Text>Игровое поле</Text>
                 </Body>
@@ -139,30 +261,28 @@ class Home extends Component {
                     <Picker.Item label="10x10" value={10} />
                     <Picker.Item label="15x15" value={15} />
                     <Picker.Item label="20x20" value={20} />
-                    <Picker.Item label="25x25" value={25} />
                   </Picker>
                 </Right>
               </ListItem>
-              <ListItem style={styles.listItem}>
+              <ListItem style={styles.listItem} icon>
                 <Left>
-                  <Text>Цвета</Text>
+                  <Button style={{backgroundColor: '#dc2015'}}>
+                    <Icon name="md-color-palette" />
+                  </Button>
                 </Left>
-                <Body style={styles.bodyColorFields}>
-                  {
-                    _.map(settings.game.colors, (color, className) => {
-                        const currentStyle = {backgroundColor: color};
-                        return (
-                          <TouchableOpacity key={className} onPress={() => this.showChangeColorModal(className, color)}>
-                            <Badge style={[currentStyle, styles.colorFields]} />
-                          </TouchableOpacity>
-                        );
-                    })
-                  }
+                <Body>
+                  <Text>Цвета</Text>
                 </Body>
+                <Right style={styles.chooseColorButton} >
+                  <Button dark rounded onPress={() => this.showChangeColorModal()}>
+                    <Icon active name="md-color-fill" />
+                  </Button>
+                </Right>
               </ListItem>
               <ListItem style={styles.listItem}>
                 <Body>
-                  <Button onPress={this.resetSettings}>
+                  <Button iconLeft onPress={this.resetSettings}>
+                    <Icon name="md-close-circle" />
                     <Text>Сбросить настройки</Text>
                   </Button>
                 </Body>
@@ -173,19 +293,60 @@ class Home extends Component {
           <Modal
             animationType="slide"
             transparent={false}
-            visible={colorPicker.show}
+            visible={colorPicker.modal}
             onRequestClose={this.closeChangeColorModal}
           >
-            <View style={{flex: 1, padding: 15, backgroundColor: '#212021'}}>
-              <Text style={{color: 'white'}}>Выберите цвет</Text>
-              <TriangleColorPicker
-                oldColor={colorPicker.oldColor}
-                color={colorPicker.newColor}
-                onColorChange={this.changeColor}
-                onColorSelected={color => this.chooseColor(color)}
-                onOldColorSelected={color => this.chooseColor(color)}
-                style={{flex: 1}}
-              />
+            <View style={styles.bodyColor}>
+              <View style={styles.bodyColorFields}>
+                {
+                  _.map(settings.game.colors, (color, className) => {
+                      const currentStyle = {backgroundColor: color};
+                      return (
+                        <TouchableOpacity key={className} onPress={() => this.showColorPicker(className, color)}>
+                          <Badge style={[currentStyle, styles.colorFields]} />
+                        </TouchableOpacity>
+                      );
+                  })
+                }
+              </View>
+              {
+                this.renderColorPicker()
+              }
+              <View style={styles.colorFieldButtons}>
+                {
+                  colorPicker.show &&
+                    <Button
+                      iconLeft
+                      bordered
+                      success
+                      onPress={() => this.hideColorPicker()}
+                    >
+                      <Icon active name="md-close-circle" />
+                      <Text>Отмена</Text>
+                    </Button>
+                }
+                {
+                  !colorPicker.show &&
+                    <Button
+                      iconLeft
+                      bordered
+                      success
+                      onPress={() => this.closeChangeColorModal()}
+                    >
+                      <Icon active name="md-close-circle" />
+                      <Text>Назад</Text>
+                    </Button>
+                }
+                <Button
+                  iconLeft
+                  success
+                  onPress={() => this.chooseColor()}
+                  disabled={!colorPicker.show}
+                >
+                  <Icon active name="md-done-all" />
+                  <Text>Сохранить</Text>
+                </Button>
+              </View>
             </View>
           </Modal>
         </Container>
