@@ -257,6 +257,7 @@ class Home extends Component {
                     mode="dialog"
                     onValueChange={this.saveGameSize}
                   >
+                    <Picker.Item label="2x2" value={2} />
                     <Picker.Item label="5x5" value={5} />
                     <Picker.Item label="10x10" value={10} />
                     <Picker.Item label="15x15" value={15} />

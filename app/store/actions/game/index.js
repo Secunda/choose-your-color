@@ -7,6 +7,7 @@ import {
   GAME_STEP,
   GAME_SCORE,
   GAME_ANIMATED,
+  GAME_FINISHED
 } from './types';
 
 export const startGame = () => ({
@@ -36,4 +37,8 @@ export const gameScore = (affectedCells, score) => ({
 
 export const gameAnimated = () => ({
   type: GAME_ANIMATED,
+});
+
+export const gameFinished = () => ({
+  type: GAME_FINISHED,
 });

@@ -6,6 +6,7 @@ import {
   GAME_STEP,
   GAME_SCORE,
   GAME_ANIMATED,
+  GAME_FINISHED,
 } from '../actions/game/types';
 
 const inititalState = {
@@ -17,6 +18,7 @@ const inititalState = {
   affectedCells: 0,
   currentColor: null,
   animate: true,
+  finished: false,
 };
 
 export default function reducer(state = inititalState, action) {
@@ -24,6 +26,7 @@ export default function reducer(state = inititalState, action) {
     case START_GAME: {
       const newState = _.cloneDeep(inititalState);
       newState.started = true;
+      newState.finished = false;
       return newState;
     }
     case GENERATE_GAME: {
@@ -53,6 +56,11 @@ export default function reducer(state = inititalState, action) {
     case GAME_ANIMATED: {
       const newState = _.cloneDeep(state);
       newState.animate = false;
+      return newState;
+    }
+    case GAME_FINISHED: {
+      const newState = _.cloneDeep(state);
+      newState.finished = true;
       return newState;
     }
     default:
