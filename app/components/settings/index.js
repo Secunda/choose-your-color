@@ -13,6 +13,7 @@ import {
   Right,
   Badge,
   Picker,
+  ActionSheet,
 } from 'native-base';
 import {View, AsyncStorage, TouchableOpacity, Modal} from 'react-native';
 import PropTypes from 'prop-types';
@@ -252,16 +253,16 @@ class Home extends Component {
                 </Body>
                 <Right>
                   <Picker
+                    mode="dropdown"
                     style={styles.gameSize}
                     selectedValue={_.get(settings, 'game.fieldSize.rows', 10)}
-                    mode="dialog"
                     onValueChange={this.saveGameSize}
                   >
-                    <Picker.Item label="2x2" value={2} />
-                    <Picker.Item label="5x5" value={5} />
-                    <Picker.Item label="10x10" value={10} />
-                    <Picker.Item label="15x15" value={15} />
-                    <Picker.Item label="20x20" value={20} />
+                    <Picker.Item label="2x2" style={{fontFamily: 'Pacifico', fontSize: 12}} value={2} />
+                    <Picker.Item label="5x5" style={{fontFamily: 'Pacifico', fontSize: 12}} value={5} />
+                    <Picker.Item label="10x10" style={{fontFamily: 'Pacifico', fontSize: 12}} value={10} />
+                    <Picker.Item label="15x15" style={{fontFamily: 'Pacifico', fontSize: 12}} value={15} />
+                    <Picker.Item label="20x20" style={{fontFamily: 'Pacifico', fontSize: 12}} value={20} />
                   </Picker>
                 </Right>
               </ListItem>

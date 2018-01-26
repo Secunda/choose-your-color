@@ -2,12 +2,15 @@ import Expo, {AppLoading} from 'expo';
 import React from 'react';
 import {connect} from 'react-redux';
 import _ from 'lodash';
-import {StyleProvider} from 'native-base';
+import {StyleProvider, Spinner} from 'native-base';
+import {View} from 'react-native';
 import PropTypes from 'prop-types';
 
 // Assets preloader
 import roboto from 'native-base/Fonts/Roboto.ttf';
 import robotoMedium from 'native-base/Fonts/Roboto_medium.ttf';
+import ubuntuCondensed from './assets/fonts/UbuntuCondensed-Regular.ttf';
+import pacifico from './assets/fonts/Pacifico-Regular.ttf';
 import bgMain from './assets/icons/bg_main.png';
 
 import getTheme from '../native-base-theme/components';
@@ -15,6 +18,8 @@ import material from '../native-base-theme/variables/material';
 
 import Routes from './routes';
 import {startApplication} from './store/actions/app';
+
+import styles from './components/common/main';
 
 class Application extends React.Component {
   static get propTypes() {
@@ -44,6 +49,8 @@ class Application extends React.Component {
     const fonts = {
       Roboto: roboto,
       Roboto_medium: robotoMedium,
+      UbuntuCondensed: ubuntuCondensed,
+      Pacifico: pacifico,
     };
     await Expo.Font.loadAsync(fonts);
 
@@ -63,7 +70,7 @@ class Application extends React.Component {
         {
           isAppStoreReady ?
             <Routes ref={(nav) => { this.navigator = nav; }} /> :
-            <AppLoading />
+            <View style={styles.spinnerContainer}><Spinner /></View>
         }
       </StyleProvider>
     );

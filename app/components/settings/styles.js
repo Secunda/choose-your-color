@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     lineHeight: 21,
-    fontFamily: 'sans-serif-medium',
   },
   colorFieldButtons: {
     flexDirection: 'row',

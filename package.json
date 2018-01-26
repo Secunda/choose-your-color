@@ -1,6 +1,6 @@
 {
   "name": "reactnativeapp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "devDependencies": {
     "babel-eslint": "^8.0.3",
@@ -39,7 +39,7 @@
     "@expo/vector-icons": "^6.2.2",
     "color": "^2.0.1",
     "core-decorators": "^0.20.0",
-    "expo": "^24.0.2",
+    "expo": "^24.0.0",
     "lodash": "^4.17.4",
     "native-base": "^2.3.5",
     "prop-types": "^15.6.0",

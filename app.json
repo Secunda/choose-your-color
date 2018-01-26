@@ -1,13 +1,16 @@
 {
   "expo": {
     "name": "Color game for friends",
-    "version": "1.0.1",
+    "slug": "secunda",
+    "version": "1.0.2",
     "sdkVersion": "24.0.0",
+    "platforms": ["android"],
+    "orientation": "portrait",
     "icon": "./app/assets/icons/icon.png",
-    "loading": {
-      "backgroundColor": "#777777",
-      "backgroundImage": "./app/assets/icons/bg.png",
-      "icon": "./app/assets/icons/logo.png"
+    "splash": {
+      "backgroundColor": "#C50202",
+      "resizeMode": "contain",
+      "image": "./app/assets/icons/logo.png"
     }
   }
 }

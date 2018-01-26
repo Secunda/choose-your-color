@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Header, Button, Icon, Left, Right, Body, H2, H3, Text} from 'native-base';
+import {Container, Header, Button, Icon, Left, Right, Body, Text} from 'native-base';
 import {View} from 'react-native';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
@@ -136,8 +136,8 @@ class Game extends Component {
                 <View style={modalStyles.modalContainer}>
                   <View style={modalStyles.innerContainer}>
                     <View style={modalStyles.modalContent}>
-                      <H2>Игра закончена!</H2>
-                      <H3>Ваш счет {game.score.toString()}</H3>
+                      <Text>Игра закончена!</Text>
+                      <Text>Ваш счет {game.score.toString()}</Text>
                     </View>
                     <Button iconLeft info onPress={() => this.closeModal()} style={modalStyles.okButton}>
                       <Icon name="md-checkmark" />
