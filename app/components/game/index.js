@@ -10,7 +10,7 @@ import Modal from 'react-native-modal';
 import Layout from '../layout';
 
 import styles from './styles';
-import modalStyles from './modal.styles';
+import modalStyles from './../../components/common/styles/modal.styles';
 
 import Score from './blocks/score';
 import Table from './blocks/table';

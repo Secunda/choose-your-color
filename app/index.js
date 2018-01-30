@@ -1,4 +1,4 @@
-import Expo, {AppLoading} from 'expo';
+import Expo from 'expo';
 import React from 'react';
 import {connect} from 'react-redux';
 import _ from 'lodash';
@@ -19,7 +19,7 @@ import material from '../native-base-theme/variables/material';
 import Routes from './routes';
 import {startApplication} from './store/actions/app';
 
-import styles from './components/common/main';
+import styles from './components/common/styles/main';
 
 class Application extends React.Component {
   static get propTypes() {
@@ -70,7 +70,7 @@ class Application extends React.Component {
         {
           isAppStoreReady ?
             <Routes ref={(nav) => { this.navigator = nav; }} /> :
-            <View style={styles.spinnerContainer}><Spinner /></View>
+            <View style={styles.spinnerContainer}><Spinner color="#08c825" /></View>
         }
       </StyleProvider>
     );

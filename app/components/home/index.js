@@ -2,10 +2,13 @@ import React, {Component} from 'react';
 import {Container, Text, Button} from 'native-base';
 import {View} from 'react-native';
 import PropTypes from 'prop-types';
+import {autobind} from 'core-decorators';
 
 import Layout from '../layout';
 import styles from './styles';
+import {navigate} from './../common/components/navigate';
 
+@autobind
 export default class Home extends Component {
   static get propTypes() {
     return {
@@ -15,18 +18,23 @@ export default class Home extends Component {
 
   render() {
     return (
-      <Layout>
+      <Layout withLogo>
         <Container style={styles.content}>
           <View style={styles.menu}>
             <Button
               block
-              success
-              style={styles.menuButton}
-              onPress={() => this.props.navigation.navigate('game')}
+              borderRadius={10}
+              style={styles.startGame}
+              onPress={() => navigate(this.props, 'game')}
             >
               <Text>Играть</Text>
             </Button>
-            <Button block warning onPress={() => this.props.navigation.navigate('settings')}>
+            <Button
+              block
+              borderRadius={10}
+              style={styles.settingsButton}
+              onPress={() => navigate(this.props, 'settings')}
+            >
               <Text>Настройки</Text>
             </Button>
           </View>

@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-
+// http://buttonoptimizer.com/#
 const styles = StyleSheet.create({
   content: {
     padding: 0,
@@ -10,8 +10,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  menuButton: {
+  startGame: {
+    backgroundColor: '#08c825',
     marginBottom: 15,
+  },
+  settingsButton: {
+    backgroundColor: '#c3263e',
   },
 });
 

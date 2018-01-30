@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {
   Container,
-  Header,
-  Title,
   Text,
   Button,
   List,
@@ -12,14 +10,17 @@ import {
   Body,
   Right,
   Badge,
-  Picker,
-  ActionSheet,
 } from 'native-base';
-import {View, AsyncStorage, TouchableOpacity, Modal} from 'react-native';
+import {
+  View,
+  AsyncStorage,
+  TouchableOpacity,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {autobind} from 'core-decorators';
 import _ from 'lodash';
+import Modal from 'react-native-modal';
 
 import {
   HueSlider,
@@ -29,8 +30,8 @@ import {
 import tinycolor from 'tinycolor2';
 
 import Layout from '../layout';
-
 import styles from './styles';
+import modalStyles from './../../components/common/styles/modal.styles';
 
 import {
   loadSettings,
@@ -72,6 +73,9 @@ class Home extends Component {
         oldColor: null,
         newColor: this.newColor,
       },
+      gameSize: {
+        modal: false,
+      },
     };
   }
 
@@ -85,10 +89,27 @@ class Home extends Component {
 
   async saveGameSize(itemValue) {
     await this.props.dispatch(saveSettingsGameSize(itemValue, this.props.app.settings));
+    this.closeGameSizeModal();
   }
 
   async resetSettings() {
     await this.props.dispatch(resetSettings());
+  }
+
+  showGameSizeModal() {
+    this.setState({
+      gameSize: {
+        modal: true,
+      },
+    });
+  }
+
+  closeGameSizeModal() {
+    this.setState({
+      gameSize: {
+        modal: false,
+      },
+    });
   }
 
   /**
@@ -226,64 +247,63 @@ class Home extends Component {
   render() {
     const settings = _.get(this.props, 'app.settings');
     const colorPicker = _.get(this.state, 'colorPicker');
+    const fieldSize = _.get(settings, 'game.fieldSize.rows', 10);
 
     return (
-      <Layout>
+      <Layout withLogo>
         <Container>
-          <Header>
-            <Left>
-              <Button transparent onPress={() => this.props.navigation.navigate('home')}>
-                <Icon name="md-arrow-round-back" />
-              </Button>
-            </Left>
-            <Body>
-              <Title>Настройки</Title>
-            </Body>
-          </Header>
           <View>
             <List style={styles.list}>
               <ListItem style={styles.listItem} icon>
-                <Left>
-                  <Button style={{backgroundColor: '#4CDA64'}}>
+                <Left style={styles.listItemContent}>
+                  <Button style={styles.gameSizeIcon}>
                     <Icon name="md-grid" />
                   </Button>
                 </Left>
-                <Body>
-                  <Text>Игровое поле</Text>
+                <Body style={styles.listItemContent}>
+                  <Text style={styles.componentText}>Игровое поле</Text>
                 </Body>
-                <Right>
-                  <Picker
-                    mode="dropdown"
-                    style={styles.gameSize}
-                    selectedValue={_.get(settings, 'game.fieldSize.rows', 10)}
-                    onValueChange={this.saveGameSize}
-                  >
-                    <Picker.Item label="2x2" style={{fontFamily: 'Pacifico', fontSize: 12}} value={2} />
-                    <Picker.Item label="5x5" style={{fontFamily: 'Pacifico', fontSize: 12}} value={5} />
-                    <Picker.Item label="10x10" style={{fontFamily: 'Pacifico', fontSize: 12}} value={10} />
-                    <Picker.Item label="15x15" style={{fontFamily: 'Pacifico', fontSize: 12}} value={15} />
-                    <Picker.Item label="20x20" style={{fontFamily: 'Pacifico', fontSize: 12}} value={20} />
-                  </Picker>
+                <Right style={styles.listItemContent}>
+                  <TouchableOpacity style={styles.settingsTouchableTextWrapper} onPress={() => this.showGameSizeModal()}>
+                    <Text style={styles.settingsTouchableText}>{`${fieldSize}X${fieldSize}`}</Text>
+                  </TouchableOpacity>
                 </Right>
               </ListItem>
               <ListItem style={styles.listItem} icon>
-                <Left>
-                  <Button style={{backgroundColor: '#dc2015'}}>
+                <Left style={styles.listItemContent}>
+                  <Button style={styles.chooseColorIcon}>
                     <Icon name="md-color-palette" />
                   </Button>
                 </Left>
-                <Body>
-                  <Text>Цвета</Text>
+                <Body style={styles.listItemContent}>
+                  <Text style={styles.componentText}>Цвета</Text>
                 </Body>
-                <Right style={styles.chooseColorButton} >
-                  <Button dark rounded onPress={() => this.showChangeColorModal()}>
-                    <Icon active name="md-color-fill" />
-                  </Button>
+                <Right style={styles.listItemContent}>
+                  <TouchableOpacity style={styles.settingsTouchableTextWrapper} onPress={() => this.showChangeColorModal()}>
+                    <View style={styles.chooseColorButton}>
+                      {
+                        _.map(settings.game.colors, (color, className) => {
+                            const currentStyle = {
+                              backgroundColor: color,
+                              padding: 10,
+                            };
+                            return (
+                              <View key={className} style={currentStyle} />
+                            );
+                        })
+                      }
+                    </View>
+                  </TouchableOpacity>
                 </Right>
               </ListItem>
               <ListItem style={styles.listItem}>
                 <Body>
-                  <Button iconLeft onPress={this.resetSettings}>
+                  <Button
+                    iconLeft
+                    borderRadius={10}
+                    style={styles.resetSettingsButton}
+                    onPress={this.resetSettings}
+                  >
                     <Icon name="md-close-circle" />
                     <Text>Сбросить настройки</Text>
                   </Button>
@@ -293,10 +313,35 @@ class Home extends Component {
           </View>
 
           <Modal
-            animationType="slide"
-            transparent={false}
-            visible={colorPicker.modal}
-            onRequestClose={this.closeChangeColorModal}
+            isVisible={this.state.gameSize.modal}
+            animationIn="zoomInDown"
+            animationOut="zoomOutUp"
+            animationInTiming={1000}
+            animationOutTiming={300}
+            onBackButtonPress={() => this.closeGameSizeModal()}
+            onBackdropPress={() => this.closeGameSizeModal()}
+          >
+            <View style={modalStyles.modalContainer}>
+              <View style={modalStyles.innerContainer}>
+                {
+                  _.map([2, 5, 10, 15, 20], size => (
+                    <TouchableOpacity style={styles.gameSizeChooser} key={size} onPress={() => this.saveGameSize(size)}>
+                      <Text>{`${size}X${size}`}</Text>
+                    </TouchableOpacity>
+                  ))
+                }
+              </View>
+            </View>
+          </Modal>
+
+          <Modal
+            isVisible={colorPicker.modal}
+            animationIn="zoomInDown"
+            animationOut="zoomOutUp"
+            animationInTiming={1000}
+            animationOutTiming={300}
+            onBackButtonPress={() => this.closeChangeColorModal()}
+            onBackdropPress={() => this.closeChangeColorModal()}
           >
             <View style={styles.bodyColor}>
               <View style={styles.bodyColorFields}>
@@ -341,7 +386,7 @@ class Home extends Component {
                 }
                 <Button
                   iconLeft
-                  success
+                  style={!colorPicker.show ? styles.modalSaveDisabled : styles.modalSave}
                   onPress={() => this.chooseColor()}
                   disabled={!colorPicker.show}
                 >
