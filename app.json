@@ -10,7 +10,7 @@
     "splash": {
       "backgroundColor": "#1F1B20",
       "resizeMode": "contain",
-      "image": "./app/assets/icons/logo.png"
+      "image": "./app/assets/icons/splashLogo.png"
     }
   }
 }

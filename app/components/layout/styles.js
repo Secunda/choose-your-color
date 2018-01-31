@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   layoutLogo: {
     flex: 1,
-    aspectRatio: 2,
+    aspectRatio: 1.4,
     resizeMode: 'contain',
     marginTop: 50,
   },
