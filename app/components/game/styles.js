@@ -9,6 +9,43 @@ const styles = StyleSheet.create({
     alignContent: 'stretch',
     alignItems: 'stretch',
   },
+  headerContentWrapper: {
+    padding: 10,
+    flex: 1,
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerContent: {
+    flex: 1,
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  scoreText: {
+    color: '#FFFFFF',
+  },
+  score: {
+    margin: 0,
+    padding: 0,
+    marginRight: 10,
+    color: '#FFFFFF',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  headerButtonNewGameWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  headerButtonNewGame: {
+    marginLeft: 'auto',
+  },
+  headerButtonNewGameIcon: {
+    color: '#08c825',
+  },
   gameContent: {
     flex: 7,
     alignContent: 'center',
@@ -34,12 +71,6 @@ const styles = StyleSheet.create({
   },
   colorField: {
     margin: 1,
-  },
-  score: {
-    margin: 0,
-    padding: 0,
-    color: '#FFFFFF',
-    fontSize: 30,
   },
   gameRow: {
     flex: 1,

@@ -7,7 +7,7 @@ import {
   GAME_STEP,
   GAME_SCORE,
   GAME_ANIMATED,
-  GAME_FINISHED
+  GAME_FINISHED,
 } from './types';
 
 export const startGame = () => ({

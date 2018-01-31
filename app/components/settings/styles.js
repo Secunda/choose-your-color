@@ -44,6 +44,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 15,
     backgroundColor: '#1F1B20',
+    borderRadius: 4,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
   },
   bodyColorFields: {
     flexDirection: 'row',

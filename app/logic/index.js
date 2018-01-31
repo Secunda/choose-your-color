@@ -169,7 +169,7 @@ export class GameLogic {
      */
   gameScore(affectedCells, previousAffectedCells, score) {
     const newCells = affectedCells - previousAffectedCells;
-    return score + Math.ceil(newCells * (1.1 ** newCells));
+    return score + Math.ceil(newCells * Math.exp(1.08 ** (newCells / 2)));
   }
 
   /**

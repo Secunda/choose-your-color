@@ -14,6 +14,7 @@ const inititalState = {
   generated: false,
   gameSettings: {},
   matrix: [],
+  step: 0,
   score: 0,
   affectedCells: 0,
   currentColor: null,
@@ -27,6 +28,7 @@ export default function reducer(state = inititalState, action) {
       const newState = _.cloneDeep(inititalState);
       newState.started = true;
       newState.finished = false;
+      newState.step = 0;
       return newState;
     }
     case GENERATE_GAME: {
@@ -44,6 +46,7 @@ export default function reducer(state = inititalState, action) {
     case GAME_STEP: {
       const newState = _.cloneDeep(state);
       newState.matrix = action.matrix;
+      newState.step += 1;
       [[newState.currentColor]] = action.matrix;
       return newState;
     }
