@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Container, Button, Icon, Text} from 'native-base';
-import {View} from 'react-native';
+import {View, AsyncStorage} from 'react-native';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {autobind} from 'core-decorators';
@@ -85,6 +85,9 @@ class Game extends Component {
         this.setState({
           finishedModal: true,
         });
+
+        // Save game results
+        const settingsFromStorage = await AsyncStorage.getItem('gameSettings');
       }
     }
   }

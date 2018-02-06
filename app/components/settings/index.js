@@ -81,19 +81,27 @@ class Home extends Component {
 
   async componentWillMount() {
     const settingsFromStorage = await AsyncStorage.getItem('gameSettings');
-
     if (settingsFromStorage) {
-      await this.props.dispatch(loadSettings(settingsFromStorage));
+      await this.props.dispatch(loadSettings(JSON.parse(settingsFromStorage)));
+    }
+  }
+
+  async saveSettingsToStorage() {
+    const settings = _.get(this.props, 'app.settings');
+    if (settings) {
+      await AsyncStorage.setItem('gameSettings', JSON.stringify(settings));
     }
   }
 
   async saveGameSize(itemValue) {
     await this.props.dispatch(saveSettingsGameSize(itemValue, this.props.app.settings));
+    await this.saveSettingsToStorage();
     this.closeGameSizeModal();
   }
 
   async resetSettings() {
     await this.props.dispatch(resetSettings());
+    await this.saveSettingsToStorage();
   }
 
   showGameSizeModal() {
@@ -201,6 +209,7 @@ class Home extends Component {
     const color = colorPicker.newColor;
 
     await this.props.dispatch(saveSettingsColorSection(color, colorPicker.element));
+    await this.saveSettingsToStorage();
 
     this.hideColorPicker();
   }
