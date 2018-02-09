@@ -8,7 +8,7 @@ import Game from './screens/Game';
 export default StackNavigator({
   home: {screen: Home},
   settings: {screen: Settings},
-  // result: {screen: Result},
+  result: {screen: Result},
   game: {screen: Game},
 }, {
   initialRouteName: 'home',

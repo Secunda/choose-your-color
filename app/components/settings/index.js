@@ -40,11 +40,12 @@ import {
   saveSettingsColorSection,
 } from '../../store/actions/app';
 
+import generalSettings from './../general';
+
 @autobind
-class Home extends Component {
+class Settings extends Component {
   static get propTypes() {
     return {
-      navigation: PropTypes.object.isRequired,
       dispatch: PropTypes.func.isRequired,
       app: PropTypes.shape({
         settings: PropTypes.object,
@@ -333,7 +334,7 @@ class Home extends Component {
             <View style={modalStyles.modalContainer}>
               <View style={modalStyles.innerContainer}>
                 {
-                  _.map([2, 5, 10, 15, 20], size => (
+                  _.map(generalSettings.gameSize, size => (
                     <TouchableOpacity style={styles.gameSizeChooser} key={size} onPress={() => this.saveGameSize(size)}>
                       <Text>{`${size}X${size}`}</Text>
                     </TouchableOpacity>
@@ -413,4 +414,4 @@ class Home extends Component {
 
 export default connect(state => ({
   app: state.app,
-}))(Home);
+}))(Settings);

@@ -1,19 +1,31 @@
 import React, {Component} from 'react';
 import {Container, Text, Button} from 'native-base';
-import {View} from 'react-native';
+import {View, AsyncStorage} from 'react-native';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import {autobind} from 'core-decorators';
 
 import Layout from '../layout';
 import styles from './styles';
 import {navigate} from './../common/components/navigate';
 
+import {
+  loadSettings,
+} from '../../store/actions/app';
+
 @autobind
-export default class Home extends Component {
+class Home extends Component {
   static get propTypes() {
     return {
-      navigation: PropTypes.object.isRequired,
+      dispatch: PropTypes.func.isRequired,
     };
+  }
+
+  async componentWillMount() {
+    const settingsFromStorage = await AsyncStorage.getItem('gameSettings');
+    if (settingsFromStorage) {
+      await this.props.dispatch(loadSettings(JSON.parse(settingsFromStorage)));
+    }
   }
 
   render() {
@@ -37,9 +49,21 @@ export default class Home extends Component {
             >
               <Text>Настройки</Text>
             </Button>
+            <Button
+              block
+              borderRadius={10}
+              style={styles.resultsButton}
+              onPress={() => navigate(this.props, 'result')}
+            >
+              <Text>Результаты</Text>
+            </Button>
           </View>
         </Container>
       </Layout>
     );
   }
 }
+
+export default connect(state => ({
+  app: state.app,
+}))(Home);

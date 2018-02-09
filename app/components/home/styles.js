@@ -16,6 +16,10 @@ const styles = StyleSheet.create({
   },
   settingsButton: {
     backgroundColor: '#c3263e',
+    marginBottom: 15,
+  },
+  resultsButton: {
+    backgroundColor: '#2076ff',
   },
 });
 

@@ -20,6 +20,7 @@ import {
   generateNewGame,
   GameLogic,
 } from './../../logic';
+import generalScore from './../../logic/score';
 
 import {
   startGame,
@@ -86,10 +87,21 @@ class Game extends Component {
           finishedModal: true,
         });
 
-        // Save game results
-        const settingsFromStorage = await AsyncStorage.getItem('gameSettings');
+        await this.saveScore();
       }
     }
+  }
+
+  async saveScore() {
+    // Save game results
+    const fullGameScores = await AsyncStorage.getItem('gameScore');
+    const fieldSize = _.get(this.props, 'app.settings.game.fieldSize.rows', 10);
+    const game = _.get(this.props, 'game');
+
+    await AsyncStorage.setItem(
+      'gameScore',
+      generalScore.prepareAllScoresForStorage(fullGameScores, fieldSize, game.score, game.step),
+    );
   }
 
   closeModal() {
